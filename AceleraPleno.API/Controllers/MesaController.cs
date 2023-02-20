@@ -59,5 +59,11 @@ namespace AceleraPleno.API.Controllers
             return await _iRepository.OcuparMesa(mesaOcupada);
         }
 
+        [HttpPut, Route("DesocuparMesa")]
+        public async Task<string> DesocuparMesa(Guid id)
+        {
+            return await _iRepository.DesocuparMesa(id);
+        }
+
     }
 }

@@ -87,16 +87,28 @@ namespace AceleraPleno.API.Repository
 
             c.Ocupada = true;
             c.ClienteId = mesaOcupada.ClienteId;
-            c.DataAlteracao = DateTime.Now;
 
             await AlterarMesa(c);
 
             return $"Mesa ocupada com sucesso!";
         }
 
-        public Task<string> DesocuparMesa(Guid id)
+        public async Task<string> DesocuparMesa(Guid id)
         {
-            throw new NotImplementedException();
+            Mesa c = new Mesa();
+
+            c = await FiltrarId(id);
+
+            if (!c.Ocupada)
+                return "Mesa ja esta Desocupada!";
+
+            c.Ocupada = false;
+            c.ClienteId = null;
+            c.StatusMesa = StatusMesa.Disponivel;
+           
+            await AlterarMesa(c);
+
+            return $"Mesa desocupada com sucesso!";
         }
 
         private async Task<bool> AlterarMesa(Mesa alt)
