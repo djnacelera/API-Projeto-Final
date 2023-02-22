@@ -32,19 +32,19 @@ namespace AceleraPleno.API.Repository
             if (cliente == null) throw new System.Exception("Erro ao atualizar");
 
             //var cartaoAtual = await _dataContext.CARTAO.FirstOrDefaultAsync(x => x.Id == id);
-            Cliente clienteAtual = await FiltrarId(id);
-            if (clienteAtual == null) throw new System.Exception(string.Format("Cliente não encontrado"));
+            Cliente clienteDb = await FiltrarId(id);
+            if (clienteDb == null) throw new System.Exception(string.Format("Cliente não encontrado"));
 
             try
             {
-                clienteAtual.Nome = cliente.Nome == null ? clienteAtual.Nome : cliente.Nome;
-                clienteAtual.CPF = cliente.CPF == null ? clienteAtual.CPF : cliente.CPF;
-                clienteAtual.DataAlteracao = DateTime.Now;
+                clienteDb.Nome = cliente.Nome == null ? clienteDb.Nome : cliente.Nome;
+                clienteDb.CPF = cliente.CPF == null ? clienteDb.CPF : cliente.CPF;
+                clienteDb.DataAlteracao = DateTime.Now;
 
-                _dataContext.Clientes.Update(clienteAtual);
+                _dataContext.Clientes.Update(clienteDb);
 
                 await _dataContext.SaveChangesAsync();
-                return clienteAtual;
+                return clienteDb;
 
             }
             catch (Exception ex)

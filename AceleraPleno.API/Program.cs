@@ -19,6 +19,8 @@ builder.Services.AddScoped<IRepositoryPrato<Prato>, PratoRepository>();
 
 builder.Services.AddScoped<IRepositoryMesa<Mesa>, MesaRepository>();
 
+builder.Services.AddScoped<IRepository<Pedido>, PedidoRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
