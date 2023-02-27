@@ -5,5 +5,6 @@
         public string Descricao { get; set; }
         public string Foto { get; set; }
         public decimal Valor { get; set; }
+        public bool Status { get; set; }
     }
 }
