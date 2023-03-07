@@ -8,6 +8,8 @@ using System;
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using AceleraPleno.API.Models.Enuns;
+using AceleraPleno.API.Models.PartialModels;
 
 namespace AceleraPleno.API.Repository
 {
@@ -25,7 +27,7 @@ namespace AceleraPleno.API.Repository
             if (prato == null)
                 throw new ArgumentNullException("Erro prato");
 
-            string path = @"E:\\AceleraPL\\AceleraPL\\ProjetoFinal\\AceleraPleno\\AceleraPleno.API\\img\\Teste.jpg";
+            string path = "";
             string img = await ConverteImg(path);
 
             prato.Foto = img;
@@ -91,6 +93,60 @@ namespace AceleraPleno.API.Repository
             string base64ImageRepresentation = Convert.ToBase64String(imageArray);
             return base64ImageRepresentation;
 
+        }
+
+        public async Task<string> AtivarPrato(Guid id)
+        {
+            if (id == null)
+                return "Favor informar o prato";
+
+            Prato c = new Prato();
+
+            c = await FiltrarId(id);
+
+            if (c.Status)
+                return "Prato já está Ativo";
+
+            c.Status = true;
+            
+
+            await AlterarPrato(c);
+
+            return $"Prato ativo com sucesso!";
+        }
+
+        public async Task<string> InativarPrato(Guid id)
+        {
+            Prato c = new Prato();
+
+            c = await FiltrarId(id);
+
+            if (!c.Status)
+                return "Prato ja esta Inativo!";
+
+            c.Status = false;
+
+            await AlterarPrato(c);
+
+            return $"Prato Inativo com sucesso!";
+        }
+
+        private async Task<bool> AlterarPrato(Prato p)
+        {
+            if (p == null)
+            {
+                return false;
+            }
+            try
+            {
+                _dataContext.Entry<Prato>(p).State = EntityState.Modified;
+                await _dataContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
         }
     }
 }

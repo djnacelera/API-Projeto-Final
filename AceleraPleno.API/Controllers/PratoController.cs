@@ -1,5 +1,6 @@
 ﻿using AceleraPleno.API.Interface;
 using AceleraPleno.API.Models;
+using AceleraPleno.API.Models.PartialModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +17,7 @@ namespace AceleraPleno.API.Controllers
             _iRepository = iRepository;
         }
 
-        [HttpGet]
+        [HttpGet, Route("Listar")]
         public async Task<IActionResult> Listar()
         {
             if (!ModelState.IsValid)
@@ -29,7 +30,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(pratos);
         }
 
-        [HttpPost]
+        [HttpPost, Route("Incluir")]
         public async Task<IActionResult> Incluir(Prato prato)
         {
             try
@@ -42,6 +43,31 @@ namespace AceleraPleno.API.Controllers
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        [HttpPut, Route("AlterarPrato")]
+        public async Task<Prato> AlterarPrato(Prato prato)
+        {
+            return await _iRepository.Atualizar(prato, prato.Id);
+        }
+
+        [HttpGet, Route("ListarPratoPorId/{id}")]
+        public async Task<Prato> ListarPratoPorId(Guid id)
+        {
+            return await _iRepository.FiltrarId(id);
+        }
+
+
+        [HttpPut, Route("AtivarPrato")]
+        public async Task<string> OcuparMesa(Guid id)
+        {
+            return await _iRepository.AtivarPrato(id);
+        }
+
+        [HttpPut, Route("InativarPrato")]
+        public async Task<string> DesocuparMesa(Guid id)
+        {
+            return await _iRepository.InativarPrato(id);
         }
     }
 }
