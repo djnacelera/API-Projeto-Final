@@ -21,6 +21,8 @@ builder.Services.AddScoped<IRepositoryMesa<Mesa>, MesaRepository>();
 
 builder.Services.AddScoped<IRepository<Pedido>, PedidoRepository>();
 
+builder.Services.AddScoped<IRepositoryLog<Log>, LogRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -33,6 +35,11 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors(x => x.AllowAnyHeader()
+.AllowAnyMethod()
+.AllowAnyOrigin()
+);
 
 app.MapControllers();
 

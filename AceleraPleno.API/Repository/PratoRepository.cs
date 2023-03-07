@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System;
 using System.IO;
 using System.Text;
+using System.Text.Json;
 using AceleraPleno.API.Models.Enuns;
 using AceleraPleno.API.Models.PartialModels;
 
@@ -15,9 +16,11 @@ namespace AceleraPleno.API.Repository
     public class PratoRepository : IRepositoryPrato<Prato>
     {
         private readonly DataContext _dataContext;
-        public PratoRepository(DataContext dataContext)
+        private readonly IRepositoryLog<Log> _log;
+        public PratoRepository(DataContext dataContext, IRepositoryLog<Log> log)
         {
             _dataContext = dataContext;
+            _log = log;
         }
         public async Task<Prato> Adicionar(Prato prato)
         {
@@ -32,6 +35,8 @@ namespace AceleraPleno.API.Repository
 
             _dataContext.Pratos.Add(prato);
             await _dataContext.SaveChangesAsync();
+
+            _log.Adicionar("Prato", prato.Id, "Adicionar", JsonSerializer.Serialize(prato), null);
 
             return prato;
         }
@@ -51,6 +56,8 @@ namespace AceleraPleno.API.Repository
                 _dataContext.Pratos.Update(pratoAtual);
 
                 await _dataContext.SaveChangesAsync();
+
+                _log.Adicionar("Prato", pratoAtual.Id, "Atualizar", JsonSerializer.Serialize(pratoAtual), null);
                 return pratoAtual;
 
             }
@@ -67,6 +74,8 @@ namespace AceleraPleno.API.Repository
 
             _dataContext.Pratos.Remove(prato);
             await _dataContext.SaveChangesAsync();
+
+            _log.Adicionar("Prato", prato.Id, "Excluir", JsonSerializer.Serialize(prato), null);
             return true;
         }
         public async Task<IEnumerable<Prato>> Listar()

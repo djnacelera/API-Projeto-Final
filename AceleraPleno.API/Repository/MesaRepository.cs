@@ -4,15 +4,18 @@ using AceleraPleno.API.Models;
 using AceleraPleno.API.Models.Enuns;
 using AceleraPleno.API.Models.PartialModels;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace AceleraPleno.API.Repository
 {
     public class MesaRepository : IRepositoryMesa<Mesa>
     {
         private readonly DataContext _dataContext;
-        public MesaRepository(DataContext dataContext)
+        private readonly IRepositoryLog<Log> _log;
+        public MesaRepository(DataContext dataContext, IRepositoryLog<Log> log)
         {
             _dataContext = dataContext;
+            _log = log;
         }
         public async Task<Mesa> Adicionar(Mesa mesa)
         {
@@ -28,6 +31,8 @@ namespace AceleraPleno.API.Repository
 
             _dataContext.Mesas.Add(mesa);
             await _dataContext.SaveChangesAsync();
+
+            _log.Adicionar("Mesa", mesa.Id, "Adicionar", JsonSerializer.Serialize(mesa), null);
 
             return mesa;
         }
@@ -55,6 +60,7 @@ namespace AceleraPleno.API.Repository
         public Task<bool> Excluir(Guid id)
         {
             throw new NotImplementedException();
+            //_log.Adicionar("Mesa", mesa.Id, "Excluir", JsonSerializer.Serialize(mesa), null);
         }
 
         public async Task<Mesa> FiltrarId(Guid id)
@@ -121,6 +127,8 @@ namespace AceleraPleno.API.Repository
             {
                 _dataContext.Entry<Mesa>(alt).State = EntityState.Modified;
                 await  _dataContext.SaveChangesAsync();
+
+                _log.Adicionar("Mesa", alt.Id, "Atualizar", JsonSerializer.Serialize(alt), null);
                 return true;
             }
             catch (Exception ex)
