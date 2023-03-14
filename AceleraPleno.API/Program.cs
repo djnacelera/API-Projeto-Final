@@ -19,6 +19,8 @@ builder.Services.AddScoped<IRepositoryPrato<Prato>, PratoRepository>();
 
 builder.Services.AddScoped<IRepositoryMesa<Mesa>, MesaRepository>();
 
+builder.Services.AddScoped<IRepositoryPedido<Pedido>, PedidoRepository>();
+
 builder.Services.AddScoped<IRepository<Pedido>, PedidoRepository>();
 
 builder.Services.AddScoped<IRepositoryLog<Log>, LogRepository>();

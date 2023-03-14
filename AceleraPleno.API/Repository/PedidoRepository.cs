@@ -3,17 +3,23 @@ using AceleraPleno.API.Interface;
 using AceleraPleno.API.Models;
 using AceleraPleno.API.Models.PartialModels;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace AceleraPleno.API.Repository
 {
-    public class PedidoRepository : IRepository<Pedido>
+    public class PedidoRepository : IRepositoryPedido<Pedido>
     {
         private readonly DataContext _dataContext;
-        private readonly IRepositoryMesa<Mesa> _mesa;
-        public PedidoRepository(DataContext dataContext, IRepositoryMesa<Mesa> mesa)
+        //private readonly IRepositoryMesa<Mesa> _mesa;
+        //private readonly IRepositoryPrato<Prato> _prato;
+        private readonly IRepositoryLog<Log> _log;
+        //public PedidoRepository(DataContext dataContext, IRepositoryMesa<Mesa> mesa, IRepositoryPrato<Prato> prato)
+        public PedidoRepository(DataContext dataContext, IRepositoryLog<Log> log)
         {
             _dataContext = dataContext;
-            _mesa = mesa;
+            //_mesa = mesa;
+            //_prato = prato;
+            _log = log;
         }
 
         public async Task<IEnumerable<Pedido>> Listar()
@@ -23,7 +29,7 @@ namespace AceleraPleno.API.Repository
 
         public async Task<Pedido> FiltrarId(Guid id)
         {
-            return await _dataContext.Pedidos.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return await _dataContext.Pedidos.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Pedido> Adicionar(Pedido pedido)
@@ -32,13 +38,32 @@ namespace AceleraPleno.API.Repository
             pedido.DtRecebimento = DateTime.Now;
             pedido.StatusPedido = Models.Enuns.StatusPedido.Recebido;
             await _dataContext.Pedidos.AddAsync(pedido);
-            _dataContext.SaveChanges();
+            await _dataContext.SaveChangesAsync();
 
-            OcuparMesa mesa = new OcuparMesa() {
+            _log.Adicionar("Pedidos", pedido.Id, "Adicionar", JsonSerializer.Serialize(pedido), null);
+
+            /*OcuparMesa mesa = new OcuparMesa() {
                 MesaId = pedido.MesaId
             };
 
-            _mesa.OcuparMesa(mesa);
+            _mesa.OcuparMesa(mesa);*/
+            return pedido;
+        }
+
+        public async Task<Pedido> Adicionar2(Guid mesaId, Guid pratoId, int qtd, decimal valor)
+        {
+            Pedido pedido = new Pedido();
+            pedido.MesaId = mesaId;
+            pedido.PratoId = pratoId;
+            pedido.Quantidade = qtd;
+            pedido.Valor = valor;
+            pedido.DataInclusao = DateTime.Now;
+            pedido.DtRecebimento = DateTime.Now;
+            pedido.StatusPedido = Models.Enuns.StatusPedido.Recebido;
+            await _dataContext.Pedidos.AddAsync(pedido);
+            await _dataContext.SaveChangesAsync();
+
+            _log.Adicionar("Pedidos", pedido.Id, "Adicionar", JsonSerializer.Serialize(pedido), null);
             return pedido;
         }
 
@@ -61,6 +86,8 @@ namespace AceleraPleno.API.Repository
                 _dataContext.Pedidos.Update(pedidoDb);
 
                 await _dataContext.SaveChangesAsync();
+
+                _log.Adicionar("Pedidos", pedidoDb.Id, "Atualizar", JsonSerializer.Serialize(pedidoDb), null);
                 return pedidoDb;
             }
             catch (Exception err)
@@ -69,10 +96,8 @@ namespace AceleraPleno.API.Repository
             }
         }
 
-        public async Task<Pedido> AlterarPedidoParaPreparando(Pedido pedido, Guid id)
+        public async Task<string> AlterarPedidoParaPreparando(Guid id)
         {
-            if (pedido == null) throw new System.Exception("Erro ao alterar status");
-
             Pedido pedidoDb = await FiltrarId(id);
             if (pedidoDb == null) throw new System.Exception(string.Format("Pedido não encontrado"));
 
@@ -82,13 +107,13 @@ namespace AceleraPleno.API.Repository
             _dataContext.Pedidos.Update(pedidoDb);
 
             await _dataContext.SaveChangesAsync();
-            return pedidoDb;
+
+            _log.Adicionar("Pedidos", pedidoDb.Id, "Atualizar", JsonSerializer.Serialize(pedidoDb), null);
+            return $"Pedido alterado para {pedidoDb.StatusPedido}";
         }
 
-        public async Task<Pedido> AlterarPedidoParaEntregue(Pedido pedido, Guid id)
+        public async Task<string> AlterarPedidoParaEntregue(Guid id)
         {
-            if (pedido == null) throw new System.Exception("Erro ao alterar status");
-
             Pedido pedidoDb = await FiltrarId(id);
             if (pedidoDb == null) throw new System.Exception(string.Format("Pedido não encontrado"));
 
@@ -98,13 +123,13 @@ namespace AceleraPleno.API.Repository
             _dataContext.Pedidos.Update(pedidoDb);
 
             await _dataContext.SaveChangesAsync();
-            return pedidoDb;
+
+            _log.Adicionar("Pedidos", pedidoDb.Id, "Atualizar", JsonSerializer.Serialize(pedidoDb), null);
+            return $"Pedido alterado para {pedidoDb.StatusPedido}";
         }
 
-        public async Task<Pedido> AlterarPedidoParaCancelado(Pedido pedido, Guid id)
+        public async Task<string> AlterarPedidoParaCancelado(Guid id)
         {
-            if (pedido == null) throw new System.Exception("Erro ao alterar status");
-
             Pedido pedidoDb = await FiltrarId(id);
             if (pedidoDb == null) throw new System.Exception(string.Format("Pedido não encontrado"));
 
@@ -114,7 +139,9 @@ namespace AceleraPleno.API.Repository
             _dataContext.Pedidos.Update(pedidoDb);
 
             await _dataContext.SaveChangesAsync();
-            return pedidoDb;
+
+            _log.Adicionar("Pedidos", pedidoDb.Id, "Atualizar", JsonSerializer.Serialize(pedidoDb), null);
+            return $"Pedido alterado para {pedidoDb.StatusPedido}";
         }
 
         public async Task<bool> Excluir(Guid id)
@@ -125,6 +152,8 @@ namespace AceleraPleno.API.Repository
 
             _dataContext.Pedidos.Remove(pedido);
             await _dataContext.SaveChangesAsync();
+
+            _log.Adicionar("Pedidos", pedido.Id, "Excluir", JsonSerializer.Serialize(pedido), null);
             return true;
         }
     }
