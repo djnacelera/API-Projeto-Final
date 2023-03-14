@@ -34,7 +34,7 @@ namespace AceleraPleno.API.Repository
             _dataContext.Pratos.Add(prato);
             await _dataContext.SaveChangesAsync();
 
-            _log.Adicionar("Prato", prato.Id, "Adicionar", JsonSerializer.Serialize(prato), null);
+            _log.Adicionar("Pratos", prato.Id, "Adicionar", JsonSerializer.Serialize(prato), null);
 
             return prato;
         }
@@ -55,7 +55,7 @@ namespace AceleraPleno.API.Repository
 
                 await _dataContext.SaveChangesAsync();
 
-                _log.Adicionar("Prato", pratoAtual.Id, "Atualizar", JsonSerializer.Serialize(pratoAtual), null);
+                _log.Adicionar("Pratos", pratoAtual.Id, "Atualizar", JsonSerializer.Serialize(pratoAtual), null);
                 return pratoAtual;
 
             }
@@ -73,7 +73,7 @@ namespace AceleraPleno.API.Repository
             _dataContext.Pratos.Remove(prato);
             await _dataContext.SaveChangesAsync();
 
-            _log.Adicionar("Prato", prato.Id, "Excluir", JsonSerializer.Serialize(prato), null);
+            _log.Adicionar("Pratos", prato.Id, "Excluir", JsonSerializer.Serialize(prato), null);
             return true;
         }
         public async Task<IEnumerable<Prato>> Listar()

@@ -44,7 +44,7 @@ namespace AceleraPleno.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clientes");
+                    b.ToTable("Clientes", (string)null);
                 });
 
             modelBuilder.Entity("AceleraPleno.API.Models.Log", b =>
@@ -80,7 +80,7 @@ namespace AceleraPleno.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Logs");
+                    b.ToTable("Logs", (string)null);
                 });
 
             modelBuilder.Entity("AceleraPleno.API.Models.Mesa", b =>
@@ -119,7 +119,7 @@ namespace AceleraPleno.API.Migrations
 
                     b.HasIndex("ClienteId");
 
-                    b.ToTable("Mesas");
+                    b.ToTable("Mesas", (string)null);
                 });
 
             modelBuilder.Entity("AceleraPleno.API.Models.Pedido", b =>
@@ -158,7 +158,7 @@ namespace AceleraPleno.API.Migrations
 
                     b.HasIndex("PratoId");
 
-                    b.ToTable("Pedidos");
+                    b.ToTable("Pedidos", (string)null);
                 });
 
             modelBuilder.Entity("AceleraPleno.API.Models.Prato", b =>
@@ -186,7 +186,7 @@ namespace AceleraPleno.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pratos");
+                    b.ToTable("Pratos", (string)null);
                 });
 
             modelBuilder.Entity("AceleraPleno.API.Models.Mesa", b =>
