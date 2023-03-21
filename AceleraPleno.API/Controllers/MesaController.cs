@@ -1,6 +1,7 @@
 ﻿using AceleraPleno.API.Interface;
 using AceleraPleno.API.Models;
 using AceleraPleno.API.Models.PartialModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
@@ -35,6 +36,7 @@ namespace AceleraPleno.API.Controllers
 
         }
 
+        [Authorize]
         [HttpGet, Route("ListarMesas")]
         public async Task<IEnumerable<Mesa>> ListarMesas()
         {

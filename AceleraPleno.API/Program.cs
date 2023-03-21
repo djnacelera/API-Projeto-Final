@@ -2,6 +2,10 @@ using AceleraPleno.API.Data;
 using AceleraPleno.API.Interface;
 using AceleraPleno.API.Models;
 using AceleraPleno.API.Repository;
+using AceleraPleno.API.Token;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,16 +18,32 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DataContext>();
 builder.Services.AddScoped<IRepository<Cliente>, ClienteRepository>();
-
 builder.Services.AddScoped<IRepositoryPrato<Prato>, PratoRepository>();
-
 builder.Services.AddScoped<IRepositoryMesa<Mesa>, MesaRepository>();
-
 builder.Services.AddScoped<IRepositoryPedido<Pedido>, PedidoRepository>();
-
 builder.Services.AddScoped<IRepository<Pedido>, PedidoRepository>();
-
 builder.Services.AddScoped<IRepositoryLog<Log>, LogRepository>();
+
+var tokenKey = "PrivateKey231352132168468654312321323adgadgag";
+var key = Encoding.ASCII.GetBytes(tokenKey);
+
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+builder.Services.AddSingleton<IJWTAuthenticationManager>(new JWT_Token(tokenKey));
 
 var app = builder.Build();
 
@@ -36,6 +56,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseCors(x => x.AllowAnyHeader()
