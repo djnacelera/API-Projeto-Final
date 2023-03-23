@@ -33,21 +33,21 @@ namespace AceleraPleno.API.Controllers
             return Ok(pedido);
         }*/
 
-        [HttpPost, Route("Incluir")]
+        [HttpPost, Route("api/Pedido/Incluir")]
         public async Task<IActionResult> Incluir2(Guid mesaId, Guid pratoId, int qtd, decimal valor)
         {
             //await _iRepositoryPedido.Adicionar2(mesaId, pratoId, qtd, valor);
             return Ok(await _iRepositoryPedido.Adicionar2(mesaId, pratoId, qtd, valor));
         }
 
-        [HttpGet, Route("FiltrarPoId")]
+        [HttpGet, Route("api/Pedido/FiltrarPoId")]
         public async Task<IActionResult> FiltrarPorId(Guid id)
         {
             var pedido = await _iRepositoryPedido.FiltrarId(id);
             return Ok(pedido);
         }
 
-        [HttpPut, Route("Atualizar")]
+        [HttpPut, Route("api/Pedido/Atualizar")]
         public async Task<IActionResult> Atualizar(Pedido pedido)
         {
             if (pedido == null)
@@ -56,7 +56,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(pedidoAtualizado);
         }
 
-        [HttpPut, Route("Preparando")]
+        [HttpPut, Route("api/Pedido/Preparando")]
         public async Task<IActionResult> AtualizarParaPreparando(Guid id)
         {
             if (id == null)
@@ -66,7 +66,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(pedidoAtualizado);
         }
 
-        [HttpPut, Route("Entregue")]
+        [HttpPut, Route("api/Pedido/Entregue")]
         public async Task<IActionResult> AtualizarParaEntregue(Guid id)
         {
             if (id == null)
@@ -76,7 +76,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(pedidoAtualizado);
         }
 
-        [HttpPut, Route("Cancelado")]
+        [HttpPut, Route("api/Pedido/Cancelado")]
         public async Task<IActionResult> AtualizarParaCancelado(Guid id)
         {
             if (id == null)
@@ -86,7 +86,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(pedidoAtualizado);
         }
 
-        [HttpDelete, Route("Deletar")]
+        [HttpDelete, Route("api/Pedido/Deletar")]
         public async Task<IActionResult> Delete(Guid id)
         {
             if (!await _iRepositoryPedido.Excluir(id))
