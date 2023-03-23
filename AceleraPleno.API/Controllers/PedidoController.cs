@@ -40,7 +40,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(await _iRepositoryPedido.Adicionar2(mesaId, pratoId, qtd, valor));
         }
 
-        [HttpGet, Route("api/Pedido/FiltrarPoId")]
+        [HttpGet, Route("api/Pedido/FiltrarPorId")]
         public async Task<IActionResult> FiltrarPorId(Guid id)
         {
             var pedido = await _iRepositoryPedido.FiltrarId(id);
