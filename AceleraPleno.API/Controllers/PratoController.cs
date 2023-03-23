@@ -45,10 +45,10 @@ namespace AceleraPleno.API.Controllers
             }
         }
 
-        [HttpPut, Route("AlterarPrato")]
-        public async Task<Prato> AlterarPrato(Prato prato)
+        [HttpPut, Route("AlterarPrato/{id}")]
+        public async Task<Prato> AlterarPrato(Guid id, Prato prato)
         {
-            return await _iRepository.Atualizar(prato, prato.Id);
+            return await _iRepository.Atualizar(prato, id);
         }
 
         [HttpGet, Route("ListarPratoPorId/{id}")]
@@ -58,13 +58,13 @@ namespace AceleraPleno.API.Controllers
         }
 
 
-        [HttpPut, Route("AtivarPrato")]
+        [HttpPut, Route("AtivarPrato/{id}")]
         public async Task<string> OcuparMesa(Guid id)
         {
             return await _iRepository.AtivarPrato(id);
         }
 
-        [HttpPut, Route("InativarPrato")]
+        [HttpPut, Route("InativarPrato/{id}")]
         public async Task<string> DesocuparMesa(Guid id)
         {
             return await _iRepository.InativarPrato(id);

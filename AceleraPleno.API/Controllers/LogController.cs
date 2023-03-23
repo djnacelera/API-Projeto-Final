@@ -28,7 +28,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(logs);
         }
 
-        [HttpGet, Route("FiltrarPorData")]
+        [HttpGet, Route("FiltrarPorData/{data}")]
         public async Task<IActionResult> FiltrarPorData(DateTime data)
         {
             var log = await _iRepositoryLog.FiltrarData(data);

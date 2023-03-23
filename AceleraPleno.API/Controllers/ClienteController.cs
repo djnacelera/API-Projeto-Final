@@ -37,23 +37,23 @@ namespace AceleraPleno.API.Controllers
             return Ok(cliente);
         }
 
-        [HttpGet, Route("FiltrarPoId")]
+        [HttpGet, Route("FiltrarPoId/{id}")]
         public async Task<IActionResult> FiltrarPorId(Guid id)
         {
             var cliente = await _iRepository.FiltrarId(id);
             return Ok(cliente);
         }
 
-        [HttpPut, Route("Atualizar")]
-        public async Task<IActionResult> Atualizar(Cliente cliente)
+        [HttpPut, Route("Atualizar/{id}")]
+        public async Task<IActionResult> Atualizar(Guid id, Cliente cliente)
         {
             if (cliente == null)
                 return BadRequest();
-            var clienteAtualizado = await _iRepository.Atualizar(cliente, cliente.Id);
+            var clienteAtualizado = await _iRepository.Atualizar(cliente, id);
             return Ok(clienteAtualizado);
         }
 
-        [HttpDelete, Route("Deletar")]
+        [HttpDelete, Route("Deletar/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             if (!await _iRepository.Excluir(id))
