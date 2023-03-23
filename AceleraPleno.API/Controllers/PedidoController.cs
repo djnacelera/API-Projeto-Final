@@ -13,7 +13,7 @@ namespace AceleraPleno.API.Controllers
             _iRepositoryPedido = iRepositoryPedido;
         }
 
-        [HttpGet, Route("Listar")]
+        [HttpGet, Route("api/Pedido/Listar")]
         public async Task<IActionResult> Listar()
         {
             if (!ModelState.IsValid)
