@@ -1,5 +1,6 @@
 ﻿using AceleraPleno.API.Interface;
 using AceleraPleno.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AceleraPleno.API.Controllers
@@ -15,6 +16,7 @@ namespace AceleraPleno.API.Controllers
             _iRepositoryPedido = iRepositoryPedido;
         }
 
+        [AllowAnonymous]
         [HttpGet, Route("Listar")]
         public async Task<IActionResult> Listar()
         {
@@ -34,7 +36,7 @@ namespace AceleraPleno.API.Controllers
             await _iRepositoryPedido.Adicionar(pedido);
             return Ok(pedido);
         }*/
-
+        [Authorize]
         [HttpPost, Route("Incluir")]
         public async Task<IActionResult> Incluir2(Guid mesaId, Guid pratoId, int qtd, decimal valor)
         {
@@ -42,6 +44,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(await _iRepositoryPedido.Adicionar2(mesaId, pratoId, qtd, valor));
         }
 
+        [AllowAnonymous]
         [HttpGet, Route("FiltrarPorId/{id}")]
         public async Task<IActionResult> FiltrarPorId(Guid id)
         {
@@ -49,6 +52,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(pedido);
         }
 
+        [Authorize]
         [HttpPut, Route("Atualizar/{id}")]
         public async Task<IActionResult> Atualizar(Guid id, Pedido pedido)
         {
@@ -58,6 +62,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(pedidoAtualizado);
         }
 
+        [Authorize]
         [HttpPut, Route("Preparando/{id}")]
         public async Task<IActionResult> AtualizarParaPreparando(Guid id)
         {
@@ -68,6 +73,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(pedidoAtualizado);
         }
 
+        [AllowAnonymous]
         [HttpPut, Route("Entregue/{id}")]
         public async Task<IActionResult> AtualizarParaEntregue(Guid id)
         {
@@ -78,6 +84,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(pedidoAtualizado);
         }
 
+        [Authorize]
         [HttpPut, Route("Cancelado/{id}")]
         public async Task<IActionResult> AtualizarParaCancelado(Guid id)
         {
@@ -88,6 +95,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(pedidoAtualizado);
         }
 
+        [Authorize]
         [HttpDelete, Route("Deletar/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {

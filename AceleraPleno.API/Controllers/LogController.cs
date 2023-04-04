@@ -1,5 +1,6 @@
 ﻿using AceleraPleno.API.Interface;
 using AceleraPleno.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AceleraPleno.API.Controllers
@@ -15,6 +16,7 @@ namespace AceleraPleno.API.Controllers
             _iRepositoryLog = iRepositoryLog;
         }
 
+        [Authorize]
         [HttpGet, Route("Listar")]
         public async Task<IActionResult> Listar()
         {
@@ -28,6 +30,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(logs);
         }
 
+        [Authorize]
         [HttpGet, Route("FiltrarPorData/{data}")]
         public async Task<IActionResult> FiltrarPorData(DateTime data)
         {

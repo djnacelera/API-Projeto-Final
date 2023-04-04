@@ -19,6 +19,7 @@ namespace AceleraPleno.API.Controllers
             _iRepository = iRepository;
         }
 
+        [Authorize]
         [HttpPost, Route("AdicionarMesa")]
         public async Task<Mesa> AdicionarMesa([FromBody]Mesa mesa)
         {
@@ -43,24 +44,28 @@ namespace AceleraPleno.API.Controllers
             return await _iRepository.Listar();
         }
 
+        [Authorize]
         [HttpGet, Route("ListarMesaPorId/{id}")]
         public async Task<Mesa> ListarMesaPorId(Guid id)
         {
             return await _iRepository.FiltrarId(id);
         }
 
+        [Authorize]
         [HttpPut, Route("AlterarMesa/{id}")]
         public async Task<Mesa> AlterarMesa(Guid id, Mesa m)
         {
             return await _iRepository.Atualizar(m, id);
         }
 
+        [Authorize]
         [HttpPut, Route("OcuparMesa")]
         public async Task<string> OcuparMesa(OcuparMesa mesaOcupada)
         {
             return await _iRepository.OcuparMesa(mesaOcupada);
         }
 
+        [Authorize]
         [HttpPut, Route("DesocuparMesa/{id}")]
         public async Task<string> DesocuparMesa(Guid id)
         {

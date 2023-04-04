@@ -1,5 +1,6 @@
 ﻿using AceleraPleno.API.Interface;
 using AceleraPleno.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ namespace AceleraPleno.API.Controllers
             _iRepository = iRepository;
         }
 
+        [Authorize]
         [HttpGet, Route("Listar")]
         public async Task<IActionResult> Listar()
         {
@@ -30,6 +32,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(clientes);
         }
 
+        [Authorize]
         [HttpPost, Route("Incluir")]
         public async Task<IActionResult> Incluir(Cliente cliente)
         {
@@ -37,6 +40,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(cliente);
         }
 
+        [Authorize]
         [HttpGet, Route("FiltrarPoId/{id}")]
         public async Task<IActionResult> FiltrarPorId(Guid id)
         {
@@ -44,6 +48,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(cliente);
         }
 
+        [Authorize]
         [HttpPut, Route("Atualizar/{id}")]
         public async Task<IActionResult> Atualizar(Guid id, Cliente cliente)
         {
@@ -53,6 +58,7 @@ namespace AceleraPleno.API.Controllers
             return Ok(clienteAtualizado);
         }
 
+        [Authorize]
         [HttpDelete, Route("Deletar/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
