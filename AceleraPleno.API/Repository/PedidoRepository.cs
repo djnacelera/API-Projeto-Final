@@ -112,6 +112,22 @@ namespace AceleraPleno.API.Repository
             return $"Pedido alterado para {pedidoDb.StatusPedido}";
         }
 
+        public async Task<string> AlterarPedidoParaDisponivel(Guid id)
+        {
+            Pedido pedidoDb = await FiltrarId(id);
+            if (pedidoDb == null) throw new System.Exception(string.Format("Pedido não encontrado"));
+
+            pedidoDb.StatusPedido = Models.Enuns.StatusPedido.Disponivel;
+            pedidoDb.DataAlteracao = DateTime.Now;
+
+            _dataContext.Pedidos.Update(pedidoDb);
+
+            await _dataContext.SaveChangesAsync();
+
+            _log.Adicionar("Pedidos", pedidoDb.Id, "Atualizar", JsonSerializer.Serialize(pedidoDb), null);
+            return $"Pedido alterado para {pedidoDb.StatusPedido}";
+        }
+
         public async Task<string> AlterarPedidoParaEntregue(Guid id)
         {
             Pedido pedidoDb = await FiltrarId(id);

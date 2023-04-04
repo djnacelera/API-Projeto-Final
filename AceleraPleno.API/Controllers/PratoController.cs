@@ -51,14 +51,14 @@ namespace AceleraPleno.API.Controllers
         }
 
         [Authorize]
-        [HttpPut, Route("AlterarPrato/{id}")]
+        [HttpPut, Route("Alterar/{id}")]
         public async Task<Prato> AlterarPrato(Guid id, Prato prato)
         {
             return await _iRepository.Atualizar(prato, id);
         }
 
         [Authorize]
-        [HttpGet, Route("ListarPratoPorId/{id}")]
+        [HttpGet, Route("FiltrarPorId/{id}")]
         public async Task<Prato> ListarPratoPorId(Guid id)
         {
             return await _iRepository.FiltrarId(id);
