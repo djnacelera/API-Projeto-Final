@@ -41,7 +41,7 @@ namespace AceleraPleno.API.Controllers
         }
 
         [Authorize]
-        [HttpGet, Route("FiltrarPoId/{id}")]
+        [HttpGet, Route("FiltrarPorId/{id}")]
         public async Task<IActionResult> FiltrarPorId(Guid id)
         {
             var cliente = await _iRepository.FiltrarId(id);
@@ -49,7 +49,7 @@ namespace AceleraPleno.API.Controllers
         }
 
         [Authorize]
-        [HttpPut, Route("Atualizar/{id}")]
+        [HttpPut, Route("Alterar/{id}")]
         public async Task<IActionResult> Atualizar(Guid id, Cliente cliente)
         {
             if (cliente == null)

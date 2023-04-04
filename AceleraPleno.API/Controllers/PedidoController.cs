@@ -53,7 +53,7 @@ namespace AceleraPleno.API.Controllers
         }
 
         [Authorize]
-        [HttpPut, Route("Atualizar/{id}")]
+        [HttpPut, Route("Alterar/{id}")]
         public async Task<IActionResult> Atualizar(Guid id, Pedido pedido)
         {
             if (pedido == null)
@@ -69,6 +69,17 @@ namespace AceleraPleno.API.Controllers
             if (id == null)
                 return BadRequest();
             await _iRepositoryPedido.AlterarPedidoParaPreparando(id);
+            var pedidoAtualizado = await _iRepositoryPedido.FiltrarId(id);
+            return Ok(pedidoAtualizado);
+        }
+
+        [Authorize]
+        [HttpPut, Route("Disponivel/{id}")]
+        public async Task<IActionResult> AtualizarParaDisponivel(Guid id)
+        {
+            if (id == null)
+                return BadRequest();
+            await _iRepositoryPedido.AlterarPedidoParaDisponivel(id);
             var pedidoAtualizado = await _iRepositoryPedido.FiltrarId(id);
             return Ok(pedidoAtualizado);
         }

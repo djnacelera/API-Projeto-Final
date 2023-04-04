@@ -4,8 +4,9 @@
     {
         Recebido = 1,
         Preparando = 2,
-        Entregue = 3,
-        Cancelado = 4,
-        Baixado = 5,
+        Disponivel = 3,
+        Entregue = 4,
+        Cancelado = 5,
+        Baixado = 6,
     }
 }
