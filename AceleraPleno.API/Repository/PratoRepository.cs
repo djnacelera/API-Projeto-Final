@@ -27,10 +27,6 @@ namespace AceleraPleno.API.Repository
             if (prato == null)
                 throw new ArgumentNullException("Erro prato");
 
-            string path = "";
-            string img = await ConverteImg(path);
-
-            prato.Foto = img;
             prato.DataInclusao = DateTime.Now;
 
             _dataContext.Pratos.Add(prato);
@@ -86,14 +82,7 @@ namespace AceleraPleno.API.Repository
         {
             return await _dataContext.Pratos.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
-        public async Task<string> ConverteImg(string path)
-        {
-            byte[] imageArray = await System.IO.File.ReadAllBytesAsync(path);
 
-            string base64ImageRepresentation = Convert.ToBase64String(imageArray);
-            return base64ImageRepresentation;
-
-        }
 
         public async Task<string> AtivarPrato(Guid id)
         {
