@@ -69,22 +69,6 @@ namespace AceleraPleno.API.Controllers
             return Ok(clientes);
         }
 
-        /*[HttpPatch]
-        public async Task<IActionResult> AtualizarNome(Guid id, [FromBody] JsonPatchDocument<Cliente> clienteParcial)
-        {
-            if(clienteParcial == null)
-                return BadRequest();
-
-            var clienteAtual = await _iRepository.FiltrarId(id);
-
-            if (clienteAtual == null)
-                return NotFound();
-
-            clienteParcial.ApplyTo(clienteAtual, (Microsoft.AspNetCore.JsonPatch.Adapters.IObjectAdapter)ModelState);
-            var isValid = TryValidateModel(clienteAtual);
-
-            if (!isValid)
-                return BadRequest(ModelState);
-        }*/
+/
     }
 }

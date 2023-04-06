@@ -77,5 +77,16 @@ namespace AceleraPleno.API.Controllers
         {
             return await _iRepository.InativarPrato(id);
         }
+
+        [Authorize]
+        [HttpDelete, Route("Deletar/{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            if (!await _iRepository.Excluir(id))
+                return BadRequest();
+
+            var prato = await _iRepository.Listar();
+            return Ok(prato);
+        }
     }
 }

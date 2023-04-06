@@ -82,8 +82,6 @@ namespace AceleraPleno.API.Repository
         {
             return await _dataContext.Pratos.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
-
-
         public async Task<string> AtivarPrato(Guid id)
         {
             if (id == null)
@@ -103,7 +101,6 @@ namespace AceleraPleno.API.Repository
 
             return $"Prato ativo com sucesso!";
         }
-
         public async Task<string> InativarPrato(Guid id)
         {
             Prato c = new Prato();
@@ -119,7 +116,6 @@ namespace AceleraPleno.API.Repository
 
             return $"Prato Inativo com sucesso!";
         }
-
         private async Task<bool> AlterarPrato(Prato p)
         {
             if (p == null)
