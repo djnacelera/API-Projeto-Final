@@ -12,9 +12,9 @@ namespace AceleraPleno.API.Token
     public class JWT_Token : IJWTAuthenticationManager
     {
         IDictionary<string, string> _credentials = new Dictionary<string, string>
-       {
+        {
            {"abacaxi123", "segredodoabacaxi" }
-       };
+        };
 
         private readonly string tokenKey;
 

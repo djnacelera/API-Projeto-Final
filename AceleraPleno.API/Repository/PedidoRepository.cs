@@ -14,11 +14,12 @@ namespace AceleraPleno.API.Repository
         //private readonly IRepositoryPrato<Prato> _prato;
         private readonly IRepositoryLog<Log> _log;
         //public PedidoRepository(DataContext dataContext, IRepositoryMesa<Mesa> mesa, IRepositoryPrato<Prato> prato)
-        public PedidoRepository(DataContext dataContext, IRepositoryLog<Log> log)
+        private readonly IRepositoryPrato<Prato> _prato;
+        public PedidoRepository(DataContext dataContext, IRepositoryLog<Log> log, IRepositoryPrato<Prato> prato)
         {
             _dataContext = dataContext;
             //_mesa = mesa;
-            //_prato = prato;
+            _prato = prato;
             _log = log;
         }
 
@@ -37,6 +38,9 @@ namespace AceleraPleno.API.Repository
             pedido.DataInclusao = DateTime.Now;
             pedido.DtRecebimento = DateTime.Now;
             pedido.StatusPedido = Models.Enuns.StatusPedido.Recebido;
+            Prato prato = await _prato.FiltrarId(pedido.PratoId);
+            pedido.Valor = prato.Valor * pedido.Quantidade;
+
             await _dataContext.Pedidos.AddAsync(pedido);
             await _dataContext.SaveChangesAsync();
 

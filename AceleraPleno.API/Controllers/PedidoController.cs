@@ -30,19 +30,21 @@ namespace AceleraPleno.API.Controllers
             return Ok(pedidos);
         }
 
-        /*[HttpPost, Route("Incluir")]
+        [Authorize]
+        [HttpPost, Route("Incluir")]
         public async Task<IActionResult> Incluir(Pedido pedido)
         {
             await _iRepositoryPedido.Adicionar(pedido);
             return Ok(pedido);
-        }*/
-        [Authorize]
-        [HttpPost, Route("Incluir")]
-        public async Task<IActionResult> Incluir2(Guid mesaId, Guid pratoId, int qtd, decimal valor)
-        {
-            //await _iRepositoryPedido.Adicionar2(mesaId, pratoId, qtd, valor);
-            return Ok(await _iRepositoryPedido.Adicionar2(mesaId, pratoId, qtd, valor));
         }
+
+        //[Authorize]
+        //[HttpPost, Route("Incluir")]
+        //public async Task<IActionResult> Incluir2(Guid mesaId, Guid pratoId, int qtd, decimal valor)
+        //{
+        //    //await _iRepositoryPedido.Adicionar2(mesaId, pratoId, qtd, valor);
+        //    return Ok(await _iRepositoryPedido.Adicionar2(mesaId, pratoId, qtd, valor));
+        //}
 
         [AllowAnonymous]
         [HttpGet, Route("FiltrarPorId/{id}")]
