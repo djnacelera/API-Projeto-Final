@@ -73,7 +73,7 @@ namespace AceleraPleno.API.Repository
 
         public async Task<IEnumerable<Mesa>> Listar()
         {
-            return await _dataContext.Mesas.ToListAsync();
+            return await _dataContext.Mesas.OrderBy(x => x.Ambiente).ToListAsync();
         }
 
         public async Task<string> OcuparMesa(OcuparMesa mesaOcupada)
