@@ -37,5 +37,13 @@ namespace AceleraPleno.API.Controllers
             var log = await _iRepositoryLog.FiltrarData(data);
             return Ok(log);
         }
+
+        [Authorize]
+        [HttpGet, Route("FiltrarPorId/{id}")]
+        public async Task<IActionResult> FiltrarPorData(Guid id)
+        {
+            var log = await _iRepositoryLog.FiltrarId(id);
+            return Ok(log);
+        }
     }
 }
