@@ -48,6 +48,7 @@ builder.Services.AddSingleton<IJWTAuthenticationManager>(new JWT_Token(tokenKey)
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+//SmarterAsp - we need to remove this line here because in production server swagger will not show
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
