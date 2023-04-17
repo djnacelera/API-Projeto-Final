@@ -11,9 +11,9 @@ namespace AceleraPleno.API.Controllers
     [ApiController]
     public class ClienteController : ControllerBase
     {
-        private readonly IRepository<Cliente> _iRepository;
+        private readonly IRepositoryCliente<Cliente> _iRepository;
 
-        public ClienteController(IRepository<Cliente> iRepository)
+        public ClienteController(IRepositoryCliente<Cliente> iRepository)
         {
             _iRepository = iRepository;
         }
@@ -45,6 +45,15 @@ namespace AceleraPleno.API.Controllers
         public async Task<IActionResult> FiltrarPorId(Guid id)
         {
             var cliente = await _iRepository.FiltrarId(id);
+            return Ok(cliente);
+        }
+
+        [Authorize]
+        [HttpGet, Route("FiltrarPorCpf/{cpf}")]
+        public async Task<IActionResult> FiltrarPorCpf(string cpf)
+        {
+            cpf = cpf.Trim().Replace(".", "").Replace("-", "");
+            var cliente = await _iRepository.FiltrarPorCpf(cpf);
             return Ok(cliente);
         }
 

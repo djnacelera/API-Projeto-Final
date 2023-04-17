@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace AceleraPleno.API.Repository
 {
-    public class ClienteRepository : IRepository<Cliente>
+    public class ClienteRepository : IRepositoryCliente<Cliente>
     {
         private readonly DataContext _dataContext;
         private readonly IRepositoryLog<Log> _log;
@@ -90,6 +90,11 @@ namespace AceleraPleno.API.Repository
 
             _log.Adicionar("Cliente", cliente.Id, "Excluir", JsonSerializer.Serialize(cliente), null);
             return true;
+        }
+
+        public async Task<Cliente> FiltrarPorCpf(string cpf)
+        {
+            return await _dataContext.Clientes.AsNoTracking().FirstOrDefaultAsync(x => x.CPF == cpf);
         }
     }
 }

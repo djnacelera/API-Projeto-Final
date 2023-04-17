@@ -18,6 +18,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DataContext>();
 builder.Services.AddScoped<IRepository<Cliente>, ClienteRepository>();
+builder.Services.AddScoped<IRepositoryCliente<Cliente>, ClienteRepository>();
 builder.Services.AddScoped<IRepositoryPrato<Prato>, PratoRepository>();
 builder.Services.AddScoped<IRepositoryMesa<Mesa>, MesaRepository>();
 builder.Services.AddScoped<IRepositoryPedido<Pedido>, PedidoRepository>();
