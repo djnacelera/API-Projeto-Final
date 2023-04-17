@@ -49,6 +49,8 @@ namespace AceleraPleno.API.Repository
                 pratoAtual.Foto = prato.Foto == null ? pratoAtual.Foto : prato.Foto;
                 pratoAtual.DataAlteracao = DateTime.Now;
                 pratoAtual.Valor = prato.Valor;
+                pratoAtual.Status = prato.Status;
+
                 _dataContext.Pratos.Update(pratoAtual);
 
                 await _dataContext.SaveChangesAsync();
