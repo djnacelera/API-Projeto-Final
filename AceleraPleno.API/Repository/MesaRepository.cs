@@ -49,6 +49,7 @@ namespace AceleraPleno.API.Repository
             m.Descricao = cartao.Descricao;
             m.DataAlteracao = DateTime.Now;
             m.Lugares = cartao.Lugares;
+            m.StatusMesa = cartao.StatusMesa;
 
             bool t = await AlterarMesa(m);
             if (t)
@@ -57,10 +58,16 @@ namespace AceleraPleno.API.Repository
                 throw new Exception("Não foi possivel altera a mesa");
         }
 
-        public Task<bool> Excluir(Guid id)
+        public async Task<bool> Excluir(Guid id)
         {
-            throw new NotImplementedException();
-            //_log.Adicionar("Mesa", mesa.Id, "Excluir", JsonSerializer.Serialize(mesa), null);
+            Mesa mesa = await FiltrarId(id);
+
+            if (mesa == null) throw new System.Exception("Erro ao Excluir");
+
+            _dataContext.Mesas.Remove(mesa);
+            _dataContext.SaveChangesAsync();
+            _log.Adicionar("Mesa", mesa.Id, "Excluir", JsonSerializer.Serialize(mesa), null);
+            return true;
         }
 
         public async Task<Mesa> FiltrarId(Guid id)
