@@ -46,6 +46,7 @@ namespace AceleraPleno.API.Repository
             try
             {
                 pratoAtual.Descricao = prato.Descricao == null ? pratoAtual.Descricao : prato.Descricao;
+                pratoAtual.Titulo = prato.Titulo == null ? pratoAtual.Titulo : prato.Titulo;
                 pratoAtual.Foto = prato.Foto == null ? pratoAtual.Foto : prato.Foto;
                 pratoAtual.DataAlteracao = DateTime.Now;
                 pratoAtual.Valor = prato.Valor;
