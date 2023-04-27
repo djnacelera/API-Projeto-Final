@@ -28,5 +28,17 @@ namespace AceleraPleno.API.Controllers
 
             return Ok(token);
         }
+        [AllowAnonymous]
+        [HttpPost, Route("autenticarAngular")]
+        public IActionResult AuthenticateAngular([FromBody] TokenModel tokenM)
+        {
+            TokenResponse token = new TokenResponse();
+               token.Token = _jwtAuthenticationManager.Authenticate(tokenM.clienteId, tokenM.clienteSecret);
+
+            if (token == null)
+                return Unauthorized();
+
+            return Ok(token);
+        }
     }
 }
