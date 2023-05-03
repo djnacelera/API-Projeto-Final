@@ -52,6 +52,13 @@ namespace AceleraPleno.API.Controllers
         }
 
         [Authorize]
+        [HttpGet, Route("FiltrarPorCPF/{cpf}")]
+        public async Task <IEnumerable<Mesa>> ListarMesaPorCliente(string cpf)
+        {
+            return await _iRepository.FiltrarPorCPF(cpf);
+        }
+
+        [Authorize]
         [HttpPut, Route("Alterar/{id}")]
         public async Task<Mesa> AlterarMesa(Guid id, Mesa m)
         {

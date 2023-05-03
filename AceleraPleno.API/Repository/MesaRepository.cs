@@ -143,5 +143,10 @@ namespace AceleraPleno.API.Repository
                 throw new Exception(ex.Message.ToString());
             }
         }
+
+        public async Task <IEnumerable<Mesa>> FiltrarPorCPF(string cpf)
+        {
+            return await _dataContext.Mesas.OrderBy(x => x.Ambiente).Where(m=> m.Clientes.CPF == cpf).ToListAsync();
+        }
     }
 }

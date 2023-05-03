@@ -8,5 +8,6 @@ namespace AceleraPleno.API.Interface
     {
         Task<string> OcuparMesa(OcuparMesa mesaOcupada);
         Task<string> DesocuparMesa(Guid id);
+        Task <IEnumerable<Mesa>> FiltrarPorCPF(string cpf);
     }
 }
