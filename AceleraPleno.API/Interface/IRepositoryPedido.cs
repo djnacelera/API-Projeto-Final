@@ -1,4 +1,5 @@
 ﻿using AceleraPleno.API.Models;
+using AceleraPleno.API.Models.PartialModels;
 
 namespace AceleraPleno.API.Interface
 {
@@ -9,5 +10,6 @@ namespace AceleraPleno.API.Interface
         Task<string> AlterarPedidoParaDisponivel(Guid id);
         Task<string> AlterarPedidoParaEntregue(Guid id);
         Task<string> AlterarPedidoParaCancelado(Guid id);
+        Task<IEnumerable<Pedido>> FiltarPorMesaECPF(FiltrarPedidoMesaCliente filtro);
     }
 }

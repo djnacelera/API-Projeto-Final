@@ -1,5 +1,6 @@
 ﻿using AceleraPleno.API.Interface;
 using AceleraPleno.API.Models;
+using AceleraPleno.API.Models.PartialModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -116,6 +117,14 @@ namespace AceleraPleno.API.Controllers
                 return BadRequest();
 
             var pedidos = await _iRepositoryPedido.Listar();
+            return Ok(pedidos);
+        }
+
+        [Authorize]
+        [HttpGet, Route("FiltrarPorMesaCliente")]
+        public async Task<IActionResult> FiltrarPorMesaCliente([FromBody] FiltrarPedidoMesaCliente filtro)
+        {
+            var pedidos = await _iRepositoryPedido.FiltarPorMesaECPF(filtro);
             return Ok(pedidos);
         }
     }

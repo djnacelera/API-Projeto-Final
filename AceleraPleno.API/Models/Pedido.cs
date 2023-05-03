@@ -8,6 +8,7 @@ namespace AceleraPleno.API.Models
         public virtual Mesa? Mesas { get; set; }
         public Guid PratoId { get; set; }
         public virtual Prato? Pratos { get; set; }
+        public string CPF { get; set; }
         public int Quantidade { get; set; }
         public decimal Valor { get; set; }
         public StatusPedido? StatusPedido { get; set; }

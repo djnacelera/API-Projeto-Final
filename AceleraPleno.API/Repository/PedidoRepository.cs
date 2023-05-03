@@ -176,5 +176,13 @@ namespace AceleraPleno.API.Repository
             _log.Adicionar("Pedidos", pedido.Id, "Excluir", JsonSerializer.Serialize(pedido), null);
             return true;
         }
+
+        public async Task<IEnumerable<Pedido>> FiltarPorMesaECPF(FiltrarPedidoMesaCliente filtro)
+        {
+            return await _dataContext.Pedidos.Where(m=> m.MesaId ==filtro.IdMesa 
+            && m.CPF == filtro.CPF 
+            && m.StatusPedido != Models.Enuns.StatusPedido.Cancelado 
+            && m.StatusPedido != Models.Enuns.StatusPedido.Baixado).ToListAsync();
+        }
     }
 }
