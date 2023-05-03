@@ -121,9 +121,12 @@ namespace AceleraPleno.API.Controllers
         }
 
         [Authorize]
-        [HttpGet, Route("FiltrarPorMesaCliente")]
-        public async Task<IActionResult> FiltrarPorMesaCliente([FromBody] FiltrarPedidoMesaCliente filtro)
+        [HttpGet, Route("FiltrarPorMesaCliente/{cpf}/{idmesa}")]
+        public async Task<IActionResult> FiltrarPorMesaCliente(string cpf, Guid idmesa)
         {
+            FiltrarPedidoMesaCliente filtro = new FiltrarPedidoMesaCliente();
+            filtro.IdMesa = idmesa;
+            filtro.CPF = cpf;
             var pedidos = await _iRepositoryPedido.FiltarPorMesaECPF(filtro);
             return Ok(pedidos);
         }
