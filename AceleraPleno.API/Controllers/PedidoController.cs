@@ -110,6 +110,28 @@ namespace AceleraPleno.API.Controllers
         }
 
         [Authorize]
+        [HttpPut, Route("Baixado/{id}")]
+        public async Task<IActionResult> AtualizarParaBaixado(Guid id)
+        {
+            if (id == null)
+                return BadRequest();
+            await _iRepositoryPedido.AlterarPedidoParaBaixado(id);
+            var pedidoAtualizado = await _iRepositoryPedido.FiltrarId(id);
+            return Ok(pedidoAtualizado);
+        }
+
+        [Authorize]
+        [HttpPut, Route("BaixarPedidosLiberarMesa/{cpf}/{idmesa}")]
+        public async Task<IActionResult> BaixarPedidosDeClientePorMesa(string cpf, Guid idmesa)
+        {
+            FiltrarPedidoMesaCliente filtro = new FiltrarPedidoMesaCliente();
+            filtro.IdMesa = idmesa;
+            filtro.CPF = cpf;
+            var pedidos = await _iRepositoryPedido.BaixarPedidosMesaCliente(filtro);
+            return Ok(pedidos);
+        }
+
+        [Authorize]
         [HttpDelete, Route("Deletar/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {

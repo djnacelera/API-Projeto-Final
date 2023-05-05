@@ -15,12 +15,14 @@ namespace AceleraPleno.API.Repository
         private readonly IRepositoryLog<Log> _log;
         //public PedidoRepository(DataContext dataContext, IRepositoryMesa<Mesa> mesa, IRepositoryPrato<Prato> prato)
         private readonly IRepositoryPrato<Prato> _prato;
-        public PedidoRepository(DataContext dataContext, IRepositoryLog<Log> log, IRepositoryPrato<Prato> prato)
+        private readonly IRepositoryMesa<Mesa> _mesa;
+        public PedidoRepository(DataContext dataContext, IRepositoryLog<Log> log, IRepositoryPrato<Prato> prato, IRepositoryMesa<Mesa> mesa)
         {
             _dataContext = dataContext;
             //_mesa = mesa;
             _prato = prato;
             _log = log;
+            _mesa = mesa;
         }
 
         public async Task<IEnumerable<Pedido>> Listar()
@@ -100,6 +102,24 @@ namespace AceleraPleno.API.Repository
             }
         }
 
+        public async Task<IEnumerable<Pedido>> BaixarPedidosMesaCliente(FiltrarPedidoMesaCliente filtro)
+        {
+            try
+            {
+                IEnumerable<Pedido> pedidos = await FiltarPorMesaECPF(filtro);
+                foreach (var item in pedidos)
+                {
+                    await AlterarPedidoParaBaixado(item.Id);
+                }
+                await _mesa.DesocuparMesa(filtro.IdMesa);
+                return pedidos;
+            }
+            catch (Exception err)
+            {
+                throw new Exception(err.Message.ToString());
+            }
+        }
+
         public async Task<string> AlterarPedidoParaPreparando(Guid id)
         {
             Pedido pedidoDb = await FiltrarId(id);
@@ -154,6 +174,22 @@ namespace AceleraPleno.API.Repository
             if (pedidoDb == null) throw new System.Exception(string.Format("Pedido não encontrado"));
 
             pedidoDb.StatusPedido = Models.Enuns.StatusPedido.Cancelado;
+            pedidoDb.DataAlteracao = DateTime.Now;
+
+            _dataContext.Pedidos.Update(pedidoDb);
+
+            await _dataContext.SaveChangesAsync();
+
+            _log.Adicionar("Pedidos", pedidoDb.Id, "Atualizar", JsonSerializer.Serialize(pedidoDb), null);
+            return $"Pedido alterado para {pedidoDb.StatusPedido}";
+        }
+
+        public async Task<string> AlterarPedidoParaBaixado(Guid id)
+        {
+            Pedido pedidoDb = await FiltrarId(id);
+            if (pedidoDb == null) throw new System.Exception(string.Format("Pedido não encontrado"));
+
+            pedidoDb.StatusPedido = Models.Enuns.StatusPedido.Baixado;
             pedidoDb.DataAlteracao = DateTime.Now;
 
             _dataContext.Pedidos.Update(pedidoDb);
