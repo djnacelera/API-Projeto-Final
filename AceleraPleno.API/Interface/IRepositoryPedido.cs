@@ -11,7 +11,7 @@ namespace AceleraPleno.API.Interface
         Task<string> AlterarPedidoParaEntregue(Guid id);
         Task<string> AlterarPedidoParaCancelado(Guid id);
         Task<string> AlterarPedidoParaBaixado(Guid id);
-        Task<IEnumerable<Pedido>> BaixarPedidosMesaCliente(FiltrarPedidoMesaCliente filtro);
+        Task<IEnumerable<PedidosMesa>> BaixarPedidosMesaCliente(FiltrarPedidoMesaCliente filtro);
         Task<IEnumerable<Pedido>> FiltarPorMesaECPF(FiltrarPedidoMesaCliente filtro);
     }
 }

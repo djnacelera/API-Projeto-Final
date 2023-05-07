@@ -16,13 +16,15 @@ namespace AceleraPleno.API.Repository
         //public PedidoRepository(DataContext dataContext, IRepositoryMesa<Mesa> mesa, IRepositoryPrato<Prato> prato)
         private readonly IRepositoryPrato<Prato> _prato;
         private readonly IRepositoryMesa<Mesa> _mesa;
-        public PedidoRepository(DataContext dataContext, IRepositoryLog<Log> log, IRepositoryPrato<Prato> prato, IRepositoryMesa<Mesa> mesa)
+        private readonly IRepositoryCliente<Cliente> _cliente;
+        public PedidoRepository(DataContext dataContext, IRepositoryLog<Log> log, IRepositoryPrato<Prato> prato, IRepositoryMesa<Mesa> mesa, IRepositoryCliente<Cliente> cliente)
         {
             _dataContext = dataContext;
             //_mesa = mesa;
             _prato = prato;
             _log = log;
             _mesa = mesa;
+            _cliente = cliente;
         }
 
         public async Task<IEnumerable<Pedido>> Listar()
@@ -102,17 +104,37 @@ namespace AceleraPleno.API.Repository
             }
         }
 
-        public async Task<IEnumerable<Pedido>> BaixarPedidosMesaCliente(FiltrarPedidoMesaCliente filtro)
+        public async Task<IEnumerable<PedidosMesa>> BaixarPedidosMesaCliente(FiltrarPedidoMesaCliente filtro)
         {
             try
             {
                 IEnumerable<Pedido> pedidos = await FiltarPorMesaECPF(filtro);
+                List<PedidosMesa> pedidosMesaList = new List<PedidosMesa>();
                 foreach (var item in pedidos)
                 {
                     await AlterarPedidoParaBaixado(item.Id);
+                    Mesa mesa = await _mesa.FiltrarId(item.MesaId);
+                    Cliente cliente = await _cliente.FiltrarPorCpf(item.CPF);
+                    Prato prato = await _prato.FiltrarId(item.PratoId);
+
+                    PedidosMesa pedidoMesa = new PedidosMesa()
+                    {
+                        PedidoId = item.Id,
+                        MesaId = item.MesaId,
+                        DescMesa = mesa.Descricao,
+                        PratoId = item.PratoId,
+                        DescPrato = prato.Descricao,
+                        ClienteId = cliente.Id,
+                        Nome = cliente.Nome,
+                        CPF = item.CPF,
+                        Quantidade = item.Quantidade,
+                        Valor = item.Valor,
+                        StatusPedido = item.StatusPedido
+                    };
+                    pedidosMesaList.Add(pedidoMesa);
                 }
                 await _mesa.DesocuparMesa(filtro.IdMesa);
-                return pedidos;
+                return pedidosMesaList;
             }
             catch (Exception err)
             {
