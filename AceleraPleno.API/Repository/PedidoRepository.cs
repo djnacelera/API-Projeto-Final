@@ -39,6 +39,10 @@ namespace AceleraPleno.API.Repository
 
         public async Task<Pedido> Adicionar(Pedido pedido)
         {
+            if (pedido.Quantidade < 1)
+            {
+                throw new Exception("Pedido não pode ter quantidade menor que 1");
+            }
             pedido.DataInclusao = DateTime.Now;
             pedido.DtRecebimento = DateTime.Now;
             pedido.StatusPedido = Models.Enuns.StatusPedido.Recebido;
@@ -112,7 +116,11 @@ namespace AceleraPleno.API.Repository
                 List<PedidosMesa> pedidosMesaList = new List<PedidosMesa>();
                 foreach (var item in pedidos)
                 {
-                    await AlterarPedidoParaBaixado(item.Id);
+                    if (item.StatusPedido == Models.Enuns.StatusPedido.Recebido)
+                        await AlterarPedidoParaCancelado(item.Id);
+                    else
+                        await AlterarPedidoParaBaixado(item.Id);
+
                     Mesa mesa = await _mesa.FiltrarId(item.MesaId);
                     Cliente cliente = await _cliente.FiltrarPorCpf(item.CPF);
                     Prato prato = await _prato.FiltrarId(item.PratoId);
