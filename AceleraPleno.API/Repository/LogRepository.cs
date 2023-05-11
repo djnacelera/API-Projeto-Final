@@ -39,7 +39,7 @@ namespace AceleraPleno.API.Repository
         }
         public async Task<IEnumerable<Log>> Listar()
         {
-            return await _dataContext.Logs.ToListAsync();
+            return await _dataContext.Logs.AsNoTracking().ToListAsync();
         }
         public async Task<IEnumerable<Log>> FiltrarData(DateTime data)
         {

@@ -119,27 +119,27 @@ namespace AceleraPleno.API.Repository
                     if (item.StatusPedido == Models.Enuns.StatusPedido.Recebido)
                         await AlterarPedidoParaCancelado(item.Id);
                     else
-                        await AlterarPedidoParaBaixado(item.Id);
-
-                    Mesa mesa = await _mesa.FiltrarId(item.MesaId);
-                    Cliente cliente = await _cliente.FiltrarPorCpf(item.CPF);
-                    Prato prato = await _prato.FiltrarId(item.PratoId);
-
-                    PedidosMesa pedidoMesa = new PedidosMesa()
                     {
-                        PedidoId = item.Id,
-                        MesaId = item.MesaId,
-                        DescMesa = mesa.Descricao,
-                        PratoId = item.PratoId,
-                        DescPrato = prato.Descricao,
-                        ClienteId = cliente.Id,
-                        Nome = cliente.Nome,
-                        CPF = item.CPF,
-                        Quantidade = item.Quantidade,
-                        Valor = item.Valor,
-                        StatusPedido = item.StatusPedido
-                    };
-                    pedidosMesaList.Add(pedidoMesa);
+                        await AlterarPedidoParaBaixado(item.Id);
+                        Mesa mesa = await _mesa.FiltrarId(item.MesaId);
+                        Cliente cliente = await _cliente.FiltrarPorCpf(item.CPF);
+                        Prato prato = await _prato.FiltrarId(item.PratoId);
+                        PedidosMesa pedidoMesa = new PedidosMesa()
+                        {
+                            PedidoId = item.Id,
+                            MesaId = item.MesaId,
+                            DescMesa = mesa.Descricao,
+                            PratoId = item.PratoId,
+                            DescPrato = prato.Descricao,
+                            ClienteId = cliente.Id,
+                            Nome = cliente.Nome,
+                            CPF = item.CPF,
+                            Quantidade = item.Quantidade,
+                            Valor = item.Valor,
+                            StatusPedido = item.StatusPedido
+                        };
+                        pedidosMesaList.Add(pedidoMesa);
+                    }         
                 }
                 await _mesa.DesocuparMesa(filtro.IdMesa);
                 return pedidosMesaList;
@@ -248,7 +248,7 @@ namespace AceleraPleno.API.Repository
             return await _dataContext.Pedidos.Where(m=> m.MesaId ==filtro.IdMesa 
             && m.CPF == filtro.CPF 
             && m.StatusPedido != Models.Enuns.StatusPedido.Cancelado 
-            && m.StatusPedido != Models.Enuns.StatusPedido.Baixado).ToListAsync();
+            && m.StatusPedido != Models.Enuns.StatusPedido.Baixado).OrderBy(x => x.StatusPedido).ToListAsync();
         }
     }
 }
